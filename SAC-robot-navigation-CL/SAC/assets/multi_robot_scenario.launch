@@ -1,0 +1,24 @@
+<launch>
+  <arg name="real_time_factor" default="5"/>
+  <env name="GAZEBO_RESOURCE_PATH" value="$(env HOME)/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models"/>
+
+
+   <!-- Gazebo  -->
+  <include file="$(find turtlebot3_bringup)/launch/empty_world.launch" >
+    <arg name="gui" value="False"/>
+    <param name="real_time_factor" value="$(arg real_time_factor)"/>
+  </include>
+  
+  <!--
+    Robot with diff drive 
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_model.launch">
+     <arg name="model" value="waffle" />
+     <arg name="multi_robot_name" value="r1"/>
+     <arg name="robot_position" value="-x 0.0 -y 0.0 -z 0.01 -R 0 -P 0 -Y +0.0" />
+  </include>
+    -->
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot3_description)/rviz/model.rviz"/>
+  
+
+</launch>

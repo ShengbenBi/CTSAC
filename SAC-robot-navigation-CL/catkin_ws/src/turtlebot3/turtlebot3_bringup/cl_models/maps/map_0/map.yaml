@@ -1,0 +1,7 @@
+image: /home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/maps/map_0/map.png
+resolution: 0.010000
+origin: [-12.000000, -12.000000, 0.000000]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+

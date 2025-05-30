@@ -1,0 +1,64 @@
+{
+    "cardboard_box":[
+            {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/cardboard_box/model.sdf","name": "cardboard_box_0",
+                "x": 1.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 },
+            {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/cardboard_box/model.sdf","name": "cardboard_box_1",
+                "x": 2.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 },
+            {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/cardboard_box/model.sdf","name": "cardboard_box_2",
+                "x": 3.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 },
+            {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/cardboard_box/model.sdf","name": "cardboard_box_3",
+                "x": 4.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+                    ],
+    "map0": [
+            ],
+    "map1": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map1/model.sdf","name": "world1",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map2": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map2/model.sdf","name": "world2",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map3": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map3/model.sdf","name": "world3",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map4": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map4/model.sdf","name": "world4",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map5": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map5/model.sdf","name": "world5",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map6": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map6/model.sdf","name": "world6",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map10": [
+            ],
+    "map11": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map11/model.sdf","name": "world11",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map12": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map12/model.sdf","name": "world12",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map13": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map13/model.sdf","name": "world13",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map14": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map14/model.sdf","name": "world14",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map15": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map15/model.sdf","name": "world15",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ],
+    "map16": [
+        {   "file": "/home/jetson/SAC-robot-navigation-CL/catkin_ws/src/turtlebot3/turtlebot3_bringup/cl_models/models/map16/model.sdf","name": "world16",
+            "x": 0.0,"y": 0.0,"z": 0.0,"qx": 0.0,"qy": 0.0,"qz": 0.0,"qw": 1.0 }
+            ]
+}
