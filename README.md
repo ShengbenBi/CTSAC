@@ -3,7 +3,7 @@ With the increasing demand for efficient and flexible robotic exploration soluti
 Training is conducted on the ROS-Gazebo continuous robotic simulation platform, with LiDAR clustering optimization to further reduce the S2R gap. Experimental results demonstrate the CTSAC algorithm outperforms the state-of-the-art non-learning and learning-based algorithms in terms of success rate and success rate-weighted exploration time. Moreover, real-world experiments validate the strong S2R transfer capabilities of CTSAC.
 This project has been accepted by 2025 ICRA. Address:https://arxiv.org/abs/2503.14254
 
-https://github.com/ShengbenBi/CTSAC/blob/main/202409230100_x264.mp4
+[https://github.com/ShengbenBi/CTSAC/blob/main/202409230100_x264.mp4](https://www.bilibili.com/video/BV1c4EEzpEfH/?spm_id_from=333.1387.homepage.video_card.click&vd_source=7c5a41135e753fb5cf4f164d27c98fdc)
 
 ## Installation
 
