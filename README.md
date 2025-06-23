@@ -74,4 +74,6 @@ python3 velodyne_test.py
 ```
 killall -9 rosout roslaunch rosmaster gzserver nodelet robot_state_publisher gzclient python python3
 ```
+If this code is helpful to your study and research, please don't hesitate to give me your star, which will be the greatest encouragement to me.
+This code is modified based on [DRL-robot-navigation](https://github.com/reiniscimurs/DRL-robot-navigation). Thanks for his open source and work.
 
