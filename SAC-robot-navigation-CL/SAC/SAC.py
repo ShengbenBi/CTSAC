@@ -14,6 +14,11 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 min_Val = torch.tensor(1e-7).float().to(device)
 current_time = datetime.datetime.now().strftime("%m%d-%H%M%S")
 
+import math
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
 class PositionalEncoding(nn.Module):
     def __init__(self, embed_dim, max_len=1000):
         super(PositionalEncoding, self).__init__()
@@ -94,7 +99,7 @@ class Decoder(nn.Module):
         return x
 
 class Transformer(nn.Module):
-    def __init__(self, embed_dim, n_blocks, n_heads, dropout):
+    def __init__(self, input_len, embed_dim, n_blocks, n_heads, dropout):
         super(Transformer, self).__init__()
         self.positional_encoding = PositionalEncoding(embed_dim)
         self.encoder = Encoder(embed_dim, n_blocks, n_heads, dropout)
@@ -111,7 +116,7 @@ class Actor(nn.Module):
     def __init__(self, state_dim, action_dim, min_log_std=-10, max_log_std=2, n_blocks=2, n_heads=8, embed_dim=1024, dropout=0.1):
         super(Actor, self).__init__()
         self.fc1 = nn.Linear(state_dim, embed_dim)
-        self.transformer = Transformer( embed_dim=embed_dim, n_blocks=n_blocks, n_heads=n_heads, dropout=dropout)
+        self.transformer = Transformer(input_len=embed_dim, embed_dim=embed_dim, n_blocks=n_blocks, n_heads=n_heads, dropout=dropout)
         self.fc2 = nn.Linear(embed_dim * 2, embed_dim)
         self.mu_head = nn.Linear(embed_dim, action_dim)
         self.log_std_head = nn.Linear(embed_dim, action_dim)
@@ -122,7 +127,7 @@ class Actor(nn.Module):
         x = F.relu(self.fc1(x))  # batch_size, seq_len, embed_dim
         x_att = self.transformer(x, x, src_mask=src_mask, tgt_mask=tgt_mask, memory_mask=memory_mask)  # batch_size, seq_len, embed_dim
 
-        if eval:
+        if eval: 
             x = torch.cat((x, x_att), dim=2)
             x = F.relu(self.fc2(x))
             mu = self.mu_head(x)
@@ -130,29 +135,31 @@ class Actor(nn.Module):
             log_std_head = torch.clamp(log_std_head, self.min_log_std, self.max_log_std)
             return mu, log_std_head
         else:
-            x_current = x[:, -1, :]                    
-            x_att = x_att.mean(dim=1)                  
-            x = torch.cat((x_current, x_att), dim=1)   
+            x_current = x[:, -1, :]                     
+            x_att = x_att[:, -1, :]                     
+            # x_att = x_att.mean(dim=1)                 
+            x = torch.cat((x_current, x_att), dim=1)    
             x = F.relu(self.fc2(x))
             mu = self.mu_head(x)
             log_std_head = self.log_std_head(x)
             log_std_head = torch.clamp(log_std_head, self.min_log_std, self.max_log_std)
             return mu, log_std_head
 
-class Critic(nn.Module): 
+class Critic(nn.Module):  # 状态值函数V（s）
     def __init__(self, state_dim, n_blocks=2, n_heads=8, embed_dim=1024, dropout=0.1):
         super(Critic, self).__init__()
         self.fc1 = nn.Linear(state_dim, embed_dim)
-        self.transformer = Transformer(embed_dim=embed_dim, n_blocks=n_blocks, n_heads=n_heads, dropout=dropout)
+        self.transformer = Transformer(input_len=embed_dim, embed_dim=embed_dim, n_blocks=n_blocks, n_heads=n_heads, dropout=dropout)
         self.fc2 = nn.Linear(embed_dim * 2, embed_dim)
-        self.fc3 = nn.Linear(embed_dim, 1024)
-        self.fc4 = nn.Linear(1024, 1)
+        self.fc3 = nn.Linear(embed_dim, embed_dim)
+        self.fc4 = nn.Linear(embed_dim, 1)
 
     def forward(self, x, src_mask=None, tgt_mask=None, memory_mask=None):
         x = F.relu(self.fc1(x))
-        x_att = self.transformer(x, x, src_mask=src_mask, tgt_mask=tgt_mask, memory_mask=memory_mask)  # 传递 x 作为 src 和 tgt
-        x = x[:, -1, :]                     
-        x_att = x_att.mean(dim=1)           
+        x_att = self.transformer(x, x, src_mask=src_mask, tgt_mask=tgt_mask, memory_mask=memory_mask) 
+        x = x[:, -1, :]                      
+        x_att = x_att[:, -1, :]              
+        # x_att = x_att.mean(dim=1)          
         x = torch.cat((x, x_att), dim=1)
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
@@ -165,17 +172,18 @@ class Q(nn.Module):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.fc1 = nn.Linear(state_dim + action_dim, embed_dim)
-        self.transformer = Transformer(embed_dim=embed_dim, n_blocks=n_blocks, n_heads=n_heads, dropout=dropout)
+        self.transformer = Transformer(input_len=embed_dim, embed_dim=embed_dim, n_blocks=n_blocks, n_heads=n_heads, dropout=dropout)
         self.fc2 = nn.Linear(embed_dim * 2, embed_dim)
-        self.fc3 = nn.Linear(embed_dim, 1024)
-        self.fc4 = nn.Linear(1024, 1)
+        self.fc3 = nn.Linear(embed_dim, embed_dim)
+        self.fc4 = nn.Linear(embed_dim, 1)
 
     def forward(self, s, a, src_mask=None, tgt_mask=None, memory_mask=None):
         x = torch.cat((s, a), -1)  # combination s and a
         x = F.relu(self.fc1(x))
-        x_att = self.transformer(x, x, src_mask=src_mask, tgt_mask=tgt_mask, memory_mask=memory_mask)  # 传递 x 作为 src 和 tgt
-        x = x[:, -1, :]                         
-        x_att = x_att.mean(dim=1)              
+        x_att = self.transformer(x, x, src_mask=src_mask, tgt_mask=tgt_mask, memory_mask=memory_mask)  
+        x = x[:, -1, :]                           
+        x_att = x_att[:, -1, :]                   
+        # x_att = x_att.mean(dim=1)               
         x = torch.cat((x, x_att), dim=1)
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
@@ -232,7 +240,7 @@ class SAC():
         sigma      = torch.exp(log_sigma)
         dist       = Normal(mu, sigma)
         z          = dist.sample()
-        action     = torch.tanh(z).detach().cpu().numpy()   
+        action     = torch.tanh(z).detach().cpu().numpy()  
         return action  
 
     def evaluate(self, state):
@@ -243,7 +251,7 @@ class SAC():
         z                = noise.sample()
         action           = torch.tanh(batch_mu + batch_sigma*z.to(device))
         log_prob         = dist.log_prob(batch_mu + batch_sigma * z.to(device)) - torch.log(1 - action.pow(2) + min_Val)
-        log_prob = log_prob.sum(dim = 2, keepdim=True) / 2   
+        log_prob = log_prob.sum(dim = 2, keepdim=True) / 2  
         return action, log_prob, z, batch_mu, batch_log_sigma
     
     def update(self, replay_buffer, batch_size, current_map_level):
@@ -259,7 +267,6 @@ class SAC():
             bn_s_ = torch.Tensor(s_).float().to(device)
             bn_d  = torch.Tensor(d).float().to(device)
 
-            
             bn_r = bn_r.reshape(-1, self.args.keys_num, 1)[:, -1, :]
             bn_d = bn_d.reshape(-1, self.args.keys_num, 1)[:, -1, :]
             target_value = self.Target_value_net(bn_s_)
@@ -271,7 +278,6 @@ class SAC():
 
             sample_action, log_prob, *_ = self.evaluate(bn_s)
             log_prob = log_prob[:, -1, :]
-            # log_prob = log_prob.mean(dim = 1)
             excepted_new_Q = torch.min(self.Q_net1(bn_s, sample_action), self.Q_net2(bn_s, sample_action))
             next_value     = excepted_new_Q - self.tem * log_prob  #J_V
 
@@ -310,7 +316,6 @@ class SAC():
                 # Recalculate pi_loss with new variables
                 sample_action, log_prob, *_ = self.evaluate(bn_s.detach())
                 log_prob = log_prob[:, -1, :]
-                # log_prob = log_prob.mean(dim = 1)
                 excepted_new_Q = torch.min(self.Q_net1(bn_s.detach(), sample_action), self.Q_net2(bn_s.detach(), sample_action))
                 pi_loss = (self.tem*log_prob - excepted_new_Q).mean()
                 self.writer.add_scalar('Loss/policy_loss', pi_loss, global_step=self.num_training)
@@ -332,6 +337,7 @@ class SAC():
         save_dir = f'./pytorch_models/{current_time}'
         os.makedirs(save_dir, exist_ok=True)
         
+
         torch.save(self.policy_net.state_dict(), os.path.join(save_dir, 'policy_net.pth'))
         torch.save(self.value_net.state_dict(), os.path.join(save_dir, 'value_net.pth'))
         torch.save(self.Q_net1.state_dict(), os.path.join(save_dir, 'Q_net1.pth'))
