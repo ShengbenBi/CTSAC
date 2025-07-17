@@ -29,8 +29,8 @@ from gazebo_msgs.srv import SpawnModel
 from gazebo_msgs.srv import DeleteModel
 from gazebo_msgs.srv import DeleteModelRequest
 
-GOAL_REACHED_DIST = 0.45   
-COLLISION_DIST    = 0.25   
+GOAL_REACHED_DIST = 1.5   
+COLLISION_DIST    = 0.35   
 TIME_DELTA        = 0.1    
 x                 = 0      
 y                 = 0      
@@ -283,11 +283,10 @@ class GazeboEnv:
         beta = np.arctan2(self.goal_y - self.odom_y, self.goal_x - self.odom_x)
         theta = beta - angle
         theta = (theta + np.pi) % (2 * np.pi) - np.pi
-        '''
-        if self.goal_reach_dist >=0.2:
+
+        if self.goal_reach_dist >=0.35:
             self.goal_reach_dist = self.goal_reach_dist - 0.000002
-            # self.goal_reach_dist = 0.35
-        '''
+
         if distance < self.goal_reach_dist:
             done = True             
 
